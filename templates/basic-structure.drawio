@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Basic Template">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" page="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Add your content here -->
+        <!-- Example vertex:
+        <mxCell id="2" value="Label" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="100" y="100" width="120" height="60" as="geometry"/>
+        </mxCell>
+        -->
+        
+        <!-- Example edge:
+        <mxCell id="3" edge="1" parent="1" source="2" target="4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        -->
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

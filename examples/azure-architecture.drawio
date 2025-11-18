@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Azure Architecture">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" page="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <mxCell id="2" value="Virtual Network" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E6F3FF;strokeColor=#0078D4;fontColor=#0078D4;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="600" height="400" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="3" value="Application Gateway" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0078D4;strokeColor=#001E4E;fontColor=#ffffff;" vertex="1" parent="2">
+          <mxGeometry x="40" y="60" width="140" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="4" value="App Services" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#0078D4;strokeColor=#001E4E;fontColor=#ffffff;" vertex="1" parent="2">
+          <mxGeometry x="240" y="60" width="140" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="5" value="Azure SQL Database" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#0078D4;strokeColor=#001E4E;fontColor=#ffffff;" vertex="1" parent="2">
+          <mxGeometry x="260" y="220" width="100" height="120" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="6" value="Key Vault" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#50E6FF;strokeColor=#0078D4;fontColor=#000000;" vertex="1" parent="2">
+          <mxGeometry x="440" y="60" width="120" height="80" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="7" value="" edge="1" parent="2" source="3" target="4">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="8" value="" edge="1" parent="2" source="4" target="5">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="9" value="" edge="1" parent="2" source="4" target="6">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
