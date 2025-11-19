@@ -1,0 +1,7 @@
+# Draw.io Whisperer - Python Dependencies
+# No external dependencies required - uses Python 3.6+ standard library only
+# 
+# To set up development environment:
+#   python3 -m venv venv
+#   source venv/bin/activate
+#   pip install -r requirements-dev.txt

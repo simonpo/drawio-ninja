@@ -1,5 +1,5 @@
 # drawio-whisperer
-GitHub Copilot instruction file that improves LLM generation of structurally valid draw.io diagrams, informed by research on graph generation challenges in large language models.
+A GitHub Copilot instruction file that improves LLM generation of structurally valid draw.io diagrams, informed by research on graph generation challenges in large language models.
 
 ## The Problem
 
@@ -227,13 +227,18 @@ Each diagram validates specific aspects of the instruction file requirements and
 
 ### Automated Validation
 
-Run the validation script to verify structural requirements:
-
+**Setup:**
 ```bash
-python3 validate.py
+# Create virtual environment (recommended)
+python3 -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Run validation
+python validate.py examples/simple-flowchart.drawio
 ```
 
-The script checks:
+**Validation checks:**
 - Root structure (id="0" and id="1") exists
 - All IDs are unique
 - All parent references are valid
@@ -257,6 +262,10 @@ examples/
   *.drawio                           # Test diagrams
 templates/
   basic-structure.drawio             # Minimal valid template
+validate.py                          # Structural validation script
+requirements.txt                     # Python dependencies (none currently)
+requirements-dev.txt                 # Development dependencies
+CONTRIBUTING.md                      # Development setup guide
 README.md                            # This file
 ```
 
