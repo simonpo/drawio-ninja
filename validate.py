@@ -150,10 +150,13 @@ def main():
         print(f"Error: {examples_dir} not found")
         sys.exit(1)
     
-    drawio_files = list(examples_dir.glob('*.drawio'))
+    # Support .drawio, .drawio.png, and .drawio.svg formats
+    drawio_files = (list(examples_dir.glob('*.drawio')) + 
+                    list(examples_dir.glob('*.drawio.png')) + 
+                    list(examples_dir.glob('*.drawio.svg')))
     
     if not drawio_files:
-        print(f"No .drawio files found in {examples_dir}")
+        print(f"No .drawio, .drawio.png, or .drawio.svg files found in {examples_dir}")
         sys.exit(1)
     
     print(f"Validating {len(drawio_files)} draw.io files...\n")
