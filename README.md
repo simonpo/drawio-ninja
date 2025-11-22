@@ -1,4 +1,4 @@
-# drawio-whisperer
+# drawio-ninja
 A GitHub Copilot instruction file that improves LLM generation of structurally valid draw.io diagrams, informed by research on graph generation challenges in large language models.
 
 ## The Problem

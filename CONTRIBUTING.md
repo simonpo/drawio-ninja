@@ -11,8 +11,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/simonpo/drawio-whisperer.git
-   cd drawio-whisperer
+   git clone https://github.com/simonpo/drawio-ninja.git
+   cd drawio-ninja
    ```
 
 2. **Create a virtual environment**
