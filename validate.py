@@ -21,11 +21,30 @@ def validate_drawio_file(filepath: Path) -> Tuple[bool, List[str]]:
     errors = []
     
     try:
-        # Read file to check XML declaration
+        # Read entire file for raw text scanning
         with open(filepath, 'r', encoding='utf-8') as f:
-            first_line = f.readline().strip()
-            if not first_line.startswith('<?xml'):
-                errors.append("Missing XML declaration (<?xml version=\"1.0\" encoding=\"UTF-8\"?>)")
+            content = f.read()
+            lines = content.splitlines()
+        
+        # Check 0a: XML declaration must be first line
+        if not lines or not lines[0].strip().startswith('<?xml'):
+            errors.append("Missing XML declaration (<?xml version=\"1.0\" encoding=\"UTF-8\"?>)")
+        
+        # Check 0b: Detect literal backslash-n sequences in value attributes
+        literal_backslash_n_pattern = re.compile(r'value="[^"]*\\n[^"]*"')
+        if literal_backslash_n_pattern.search(content):
+            errors.append("Found literal '\\n' in value attribute - use XML entity &#xa; or <br/> with html=1")
+        
+        # Check 0d: Detect multi-line value attributes (opening quote and closing quote on different lines)
+        for i, line in enumerate(lines, 1):
+            # Look for value=" without closing " on same line
+            if 'value="' in line:
+                # Count quotes after value=
+                value_start = line.find('value="')
+                after_value = line[value_start + 7:]  # Skip 'value="'
+                # If we don't find a closing quote (or only find escaped quotes), it's multi-line
+                if '"' not in after_value or after_value.count('"') < 1:
+                    errors.append(f"Line {i}: Multi-line value attribute detected - keep value on single line")
         
         tree = ET.parse(filepath)
         root = tree.getroot()
@@ -108,27 +127,35 @@ def validate_drawio_file(filepath: Path) -> Tuple[bool, List[str]]:
                 if cell.get('vertex') != '1' and cell.get('edge') != '1':
                     errors.append(f"Cell '{cell_id}' missing vertex='1' or edge='1' attribute")
         
-        # Check 9: Label values should not contain unescaped XML special characters
+        # Check 9: Label values should not contain unescaped XML special characters or use <br/> incorrectly
         # Pattern matches & not followed by valid entity (amp, lt, gt, quot, apos, or numeric)
         unsafe_char_pattern = re.compile(r'&(?!amp;|lt;|gt;|quot;|apos;|#\d+;|#x[0-9a-fA-F]+;)')
         for cell in graph_root.findall('mxCell'):
             cell_id = cell.get('id')
             value = cell.get('value', '')
+            style = cell.get('style', '')
             
             # Check for unescaped ampersand
             if unsafe_char_pattern.search(value):
                 errors.append(f"Cell '{cell_id}' value contains unescaped '&' - use 'and' instead")
             
-            # Check for other problematic characters
+            # Check for < and > with proper <br/> handling
+            has_html = 'html=1' in style
+            
             if '<' in value:
-                errors.append(f"Cell '{cell_id}' value contains '<' - use 'less than' instead")
+                # If html=1, allow only <br/> or <br> tags
+                if has_html:
+                    # Remove valid <br/> and <br> tags, then check for remaining <
+                    cleaned = re.sub(r'<br\s*/?>','', value, flags=re.IGNORECASE)
+                    if '<' in cleaned:
+                        errors.append(f"Cell '{cell_id}' value contains '<' other than <br/> - use 'less than' instead")
+                else:
+                    errors.append(f"Cell '{cell_id}' value contains '<' without html=1 in style - use 'less than' or add html=1")
+            
             if '>' in value and not value.startswith('<') and not value.endswith('>'):
                 # Allow > in HTML-like content but warn otherwise
-                errors.append(f"WARNING: Cell '{cell_id}' value contains '>' - consider using 'greater than'")
-            
-            # Check for newline entities in attributes (common error)
-            if '&#xa;' in value or '&#xA;' in value or '&#10;' in value:
-                errors.append(f"Cell '{cell_id}' value contains newline entity - use hyphen or space instead")
+                if not has_html:
+                    errors.append(f"WARNING: Cell '{cell_id}' value contains '>' - consider using 'greater than'")
         
     except ET.ParseError as e:
         errors.append(f"XML parsing error: {e}")
@@ -141,19 +168,36 @@ def validate_drawio_file(filepath: Path) -> Tuple[bool, List[str]]:
 
 
 def main():
-    """Validate all draw.io files in examples directory."""
+    """Validate all draw.io files in examples directory or specified files."""
     
     script_dir = Path(__file__).parent
-    examples_dir = script_dir / 'examples'
     
-    if not examples_dir.exists():
-        print(f"Error: {examples_dir} not found")
-        sys.exit(1)
-    
-    # Support .drawio, .drawio.png, and .drawio.svg formats
-    drawio_files = (list(examples_dir.glob('*.drawio')) + 
-                    list(examples_dir.glob('*.drawio.png')) + 
-                    list(examples_dir.glob('*.drawio.svg')))
+    # Accept files from command line or default to examples directory
+    if len(sys.argv) > 1:
+        # Validate specified files
+        drawio_files = []
+        for arg in sys.argv[1:]:
+            path = Path(arg)
+            if path.is_file():
+                drawio_files.append(path)
+            elif path.is_dir():
+                drawio_files.extend(list(path.glob('*.drawio')))
+                drawio_files.extend(list(path.glob('*.drawio.png')))
+                drawio_files.extend(list(path.glob('*.drawio.svg')))
+            else:
+                print(f"Warning: {arg} not found, skipping")
+    else:
+        # Default to examples directory
+        examples_dir = script_dir / 'examples'
+        
+        if not examples_dir.exists():
+            print(f"Error: {examples_dir} not found")
+            sys.exit(1)
+        
+        # Support .drawio, .drawio.png, and .drawio.svg formats
+        drawio_files = (list(examples_dir.glob('*.drawio')) + 
+                        list(examples_dir.glob('*.drawio.png')) + 
+                        list(examples_dir.glob('*.drawio.svg')))
     
     if not drawio_files:
         print(f"No .drawio, .drawio.png, or .drawio.svg files found in {examples_dir}")

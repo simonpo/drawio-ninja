@@ -64,12 +64,13 @@ This creates an infinite canvas that scales to content.
 
 The `drawio.instructions.md` file provides GitHub Copilot with:
 
-1. **Progressive template structure** - Three-stage demonstration of minimal structure → vertices → complete diagram
-2. **Non-negotiable rules** - Ten specific requirements addressing observed failure modes
-3. **Generation protocol** - Explicit vertex-before-edges ordering to prevent orphaned references
-4. **Style library** - Ready-to-use shape definitions and colour palettes
-5. **Working examples** - Four complete, validated diagrams from simple to complex
-6. **Validation checklist** - Pre-output verification steps
+1. **Zero-Error Quick Start** - Prominent mandatory requirements (XML declaration, infinite canvas, root structure) with clear DO/DON'T list to prevent the most common generation failures
+2. **Progressive template structure** - Three-stage demonstration of minimal structure → vertices → complete diagram
+3. **Non-negotiable rules** - Ten specific requirements addressing observed failure modes
+4. **Generation protocol** - Explicit vertex-before-edges ordering to prevent orphaned references
+5. **Style library** - Ready-to-use shape definitions and colour palettes
+6. **Working examples** - Four complete, validated diagrams from simple to complex
+7. **Final output checklist** - Single authoritative pre-output verification covering all structural, formatting, and encoding requirements
 
 ## Usage
 
@@ -239,12 +240,16 @@ python validate.py examples/simple-flowchart.drawio
 ```
 
 **Validation checks:**
+- XML declaration present as first line
 - Root structure (id="0" and id="1") exists
 - All IDs are unique
 - All parent references are valid
 - All edge source/target IDs exist
 - Geometry elements have `as="geometry"` attribute
 - Cell type attributes (vertex/edge) are present
+- No literal `\n` sequences in value attributes
+- Multi-line value attributes flagged (should be single-line with entities)
+- `<br/>` tags validated against `html=1` requirement
 - Page settings (warns about fixed page sizes)
 
 All example diagrams pass validation, demonstrating the instruction file's effectiveness at preventing common LLM failures. Our validation rules are informed by structural patterns observed in the [official draw.io diagrams repository](https://github.com/jgraph/drawio-diagrams), ensuring alignment with authoritative implementations from the draw.io creators.
@@ -275,12 +280,11 @@ The instruction file cannot guarantee:
 
 - **Optimal spatial layout** - LLMs lack inherent spatial reasoning; coordinates may require adjustment
 - **Complex nested hierarchies** - Groups within groups beyond 2-3 levels may have parent reference errors
-- **XML special character handling** - LLMs may use unescaped `&`, `<`, `>` in labels, causing XML parse errors. The instruction file recommends word alternatives ("and" instead of "&"), but validation is required
-- **Multi-line label formatting** - LLMs may incorrectly use HTML entities like `&#xa;` instead of simple separators
+- **XML special character handling** - LLMs may use unescaped `&` or stray `<`, `>` in labels, causing XML parse errors. The instruction file recommends word alternatives ("and" instead of "&") and validates against these patterns
 - **Style consistency** - Colour choices and styling may vary between generations
 - **Large diagrams** - Graphs with >20 nodes risk ID tracking failures despite instructions
 
-For production diagrams, validate structure and test in draw.io. Fix XML encoding errors manually if needed.
+For production diagrams, validate structure and test in draw.io. The validator detects common encoding and structural issues automatically.
 
 ## Future Work: Multi-Stage Diagram Workflow
 
@@ -364,9 +368,10 @@ This indicates malformed XML. Common causes:
    ```
 
 2. **Invalid XML characters in values**
-   - Unescaped `&`, `<`, `>`, `"` characters
-   - Use `&amp;`, `&lt;`, `&gt;`, `&quot;` instead
-   - Or use `&#xa;` for line breaks in multi-line text
+   - Unescaped `&` characters (use word "and" instead)
+   - Stray `<` or `>` not part of valid `<br/>` tags
+   - Use `&#xa;` for line breaks in multi-line labels
+   - `<br/>` requires `html=1` in the style attribute
 
 3. **Missing required attributes**
    - Check `as="geometry"` is present on all `<mxGeometry>` elements
@@ -438,4 +443,6 @@ Without these foundations, this project wouldn't exist. *Chapeau* to all.
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE) file for details.
+
+This project is open source and freely available for use, modification, and distribution. Draw your diagrams with confidence.

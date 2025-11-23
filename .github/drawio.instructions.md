@@ -21,6 +21,42 @@ Recent research demonstrates that LLMs struggle with graph-structured data due t
 
 **Scope:** These instructions focus on **structural validity** - ensuring generated XML files open reliably in draw.io. Layout optimization and visual aesthetics are separate concerns addressed in future work.
 
+## ZERO-ERROR QUICK START
+
+**Every .drawio file you generate MUST:**
+
+1. **Start with the XML declaration (exact line):**
+   ```xml
+   <?xml version="1.0" encoding="UTF-8"?>
+   ```
+
+2. **Use infinite canvas (never fixed page):**
+   ```xml
+   <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" page="0">
+   ```
+   ❌ NEVER use `page="1"` with `pageWidth`/`pageHeight`
+
+3. **Include root structure (always):**
+   ```xml
+   <root>
+     <mxCell id="0"/>
+     <mxCell id="1" parent="0"/>
+   ```
+
+**DO:**
+- Output ONLY raw XML (no markdown fences like ```xml or ```)
+- Use sequential IDs starting at 2 (id="0" and id="1" are reserved)
+- Create all vertices before any edges
+- For multi-line labels: use `&#xa;` (XML entity) or `<br/>` when `style` contains `html=1`
+- For single-line: use hyphens or spaces: `"User Service - Auth"`
+
+**DON'T:**
+- Add commentary, explanations, or disclaimers before/after the XML
+- Use literal `\n` (backslash-n) in `value` attributes
+- Put actual line breaks (physical newlines) inside `value="..."` attributes
+- Wrap output in markdown code blocks
+- Skip the XML declaration line
+
 ## Progressive Template Structure
 
 ### Stage 1: Minimal Valid Structure
@@ -131,6 +167,25 @@ Only after all vertices exist, add edges that reference them. Edges must connect
 - `source`: ID of source vertex (must exist)
 - `target`: ID of target vertex (must exist)
 - `<mxGeometry relative="1">`: Edge geometry uses relative positioning
+
+## FINAL OUTPUT CHECKLIST (must all be true)
+
+Before generating your final .drawio file, verify:
+
+- [ ] First line is exactly: `<?xml version="1.0" encoding="UTF-8"?>`
+- [ ] `<mxGraphModel>` has `page="0"` (infinite canvas)
+- [ ] Root cells `id="0"` and `id="1" parent="0"` are present
+- [ ] All cell IDs are unique sequential integers (2, 3, 4...)
+- [ ] All vertices created before any edges
+- [ ] Every edge `source` and `target` reference existing vertex IDs
+- [ ] No literal `\n` (backslash-n) or physical newlines in `value` attributes
+- [ ] Multi-line labels use `&#xa;` or `<br/>` (when `html=1` in style)
+- [ ] No `<` or `>` except `<br/>` when `html=1` is in `style`
+- [ ] Hex color values have NO quotes: `fillColor=#0078D4` not `fillColor="#0078D4"`
+- [ ] No markdown code fences (```xml) wrapping the output
+- [ ] No explanatory text before or after the XML
+
+**Output ONLY raw XML starting with `<?xml version="1.0" encoding="UTF-8"?>`. Do not wrap in markdown. Do not add commentary.**
 
 ## NON-NEGOTIABLE RULES
 
@@ -255,13 +310,12 @@ The style attribute is already quoted, so values inside must not use additional 
 
 **Why this fails:**
 ```drawio
-<!-- WRONG: Nested quotes break XML parsing -->
+<!-- WRONG: Quote after = closes the style attribute prematurely -->
 <mxCell id="2" value="Box" style="fillColor="#0078D4;strokeColor=#001E4E" vertex="1" parent="1">
-<!--                              ↑ This quote closes the style attribute prematurely -->
+<!--                              ↑ This quote ends style here, leaving #0078D4;strokeColor=#001E4E as invalid -->
 
-<!-- WRONG: Inconsistent quoting creates malformed XML -->
+<!-- WRONG: Inconsistent quoting breaks XML structure -->
 <mxCell id="2" value="Box" style="fillColor="#e1d5e7;strokeColor=#9673a6" vertex="1" parent="1">
-<!--                              ↑ Opens quote but hex value not properly wrapped -->
 ```
 
 **Result:** File fails to open with "Not a diagram file" or "attributes construct error".
@@ -587,22 +641,6 @@ Common LLM failures that break draw.io files:
 6. **Circular parent references** - A cell cannot be its own ancestor in the parent chain
 7. **Invalid source/target IDs** - Edge source and target must reference existing vertex IDs
 8. **Forgetting vertex="1" or edge="1"** - Every cell must declare its type
-
-## Validation Checklist
-
-Before outputting XML, verify:
-
-- [ ] XML declaration (`<?xml version="1.0" encoding="UTF-8"?>`) is first line
-- [ ] Root cell (id="0") present
-- [ ] Default layer (id="1" parent="0") present
-- [ ] All cell IDs are unique
-- [ ] All parent references point to valid cell IDs
-- [ ] All edge source/target IDs reference existing vertices
-- [ ] All `<mxGeometry>` elements have `as="geometry"` attribute
-- [ ] `page="0"` set in mxGraphModel for web use
-- [ ] **Hex colour values have NO quotes** - `fillColor=#0078D4` not `fillColor="#0078D4"`
-- [ ] **Label values avoid XML special characters** - use `and` not `&`, avoid `< > " '`
-- [ ] Output contains only XML (no explanatory text, no markdown code fences)
 
 ## Final Reminder
 
