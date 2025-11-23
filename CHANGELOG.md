@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-11-22
+
 ### Added
 - **Zero-Error Quick Start section** in instruction file with mandatory first-line XML declaration, infinite canvas rule, and clear DO/DON'T list to prevent common generation errors
 - **FINAL OUTPUT CHECKLIST** consolidating all pre-output validation requirements in one authoritative location
@@ -47,5 +49,6 @@ The hardened instructions prioritize:
 - Comprehensive rule set for mxGraph XML generation
 - Style and color palette reference guides
 
-[Unreleased]: https://github.com/username/drawio-ninja/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/username/drawio-ninja/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/username/drawio-ninja/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/username/drawio-ninja/releases/tag/v1.0.0

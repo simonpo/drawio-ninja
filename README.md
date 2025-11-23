@@ -72,6 +72,8 @@ The `drawio.instructions.md` file provides GitHub Copilot with:
 6. **Working examples** - Four complete, validated diagrams from simple to complex
 7. **Final output checklist** - Single authoritative pre-output verification covering all structural, formatting, and encoding requirements
 
+See [CHANGELOG.md](CHANGELOG.md) for detailed history of instruction file improvements.
+
 ## Usage
 
 ### In GitHub Copilot Chat
@@ -419,6 +421,8 @@ Improvements to the instruction file should:
 2. Include working examples demonstrating the fix
 3. Maintain compatibility with draw.io XML specification
 4. Be tested with GitHub Copilot before submission
+
+All notable changes are documented in [CHANGELOG.md](CHANGELOG.md) following [Keep a Changelog](https://keepachangelog.com/) format.
 
 ## References
 
