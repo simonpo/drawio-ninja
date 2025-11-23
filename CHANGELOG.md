@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-11-23
+
+### Added
+- Templates directory README linking to official jgraph/drawio-diagrams repository for comprehensive examples and reference implementations
+
 ## [1.1.0] - 2025-11-22
 
 ### Added
@@ -49,6 +54,7 @@ The hardened instructions prioritize:
 - Comprehensive rule set for mxGraph XML generation
 - Style and color palette reference guides
 
-[Unreleased]: https://github.com/simonpo/drawio-ninja/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/simonpo/drawio-ninja/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/simonpo/drawio-ninja/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/simonpo/drawio-ninja/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/simonpo/drawio-ninja/releases/tag/v1.0.0
