@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<!--
+  This is a sanitized OPNsense configuration file for homelab network documentation and diagramming.
+  All sensitive data has been replaced according to the following rules:
+    - Public WAN IPs replaced with 203.0.113.x (TEST-NET-3)
+    - Private IPs mapped consistently to 192.168.x.x and 10.x.x.x ranges
+    - Hostnames replaced with generic names (firewall, server1, etc.)
+    - Domain names replaced with example.local
+    - All certificate and password content removed or replaced with [REMOVED]
+    - MAC addresses randomized
+    - VPN, DDNS, and API credentials removed or replaced with [REMOVED]
+  VLANs, subnets, firewall rules, and service logic are preserved for authenticity.
+-->
+<opnsense>
+  <theme>opnsense</theme>
+  <sysctl version="1.0.1" persisted_at="1760848261.73">
+    <item/>
+  </sysctl>
+  <system>
+    <optimization>normal</optimization>
+    <hostname>firewall</hostname>
+    <domain>example.local</domain>
+    <dnsallowoverride>0</dnsallowoverride>
+    <dnsallowoverride_exclude/>
+    <group uuid="827c257e-edab-4967-bf81-bca95363cc7f">
+      <gid>1999</gid>
+      <name>admins</name>
+      <scope>system</scope>
+      <description>System Administrators</description>
+      <priv>page-all</priv>
+      <member>0</member>
+      <source_networks/>
+    </group>
+    <user uuid="1a9198e8-9ffe-4332-a839-aaef2a559805">
+      <uid>0</uid>
+      <name>root</name>
+      <disabled>0</disabled>
+      <scope>system</scope>
+      <expires/>
+      <authorizedkeys/>
+      <otp_seed/>
+      <shell/>
+      <password>[REMOVED]</password>
+      <pwd_changed_at/>
+      <landing_page/>
+      <comment/>
+      <email/>
+      <apikeys/>
+      <priv/>
+      <language/>
+      <descr>System Administrator</descr>
+      <dashboard/>
+    </user>
+    <user uuid="9ebed3f9-3a9a-4b69-ad83-5e866c2afac9">
+      <uid>2000</uid>
+      <name>apiuser</name>
+      <disabled>0</disabled>
+      <scope>user</scope>
+      <expires/>
+      <authorizedkeys/>
+      <otp_seed/>
+      <shell/>
+      <password>[REMOVED]</password>
+      <pwd_changed_at/>
+      <landing_page/>
+      <comment>Used for API access</comment>
+      <email>user@example.local</email>
+      <apikeys>[REMOVED]</apikeys>
+      <priv>page-diagnostics-system-activity,page-status-trafficgraph</priv>
+      <language/>
+      <descr>API User</descr>
+      <dashboard/>
+    </user>
+    <timezone>America/Los_Angeles</timezone>
+    <timeservers>0.opnsense.pool.ntp.org time.nw.nist.gov time.nist.gov time.cloudflare.com time.google.com 0.us.pool.ntp.org 1.us.pool.ntp.org 2.us.pool.ntp.org 3.us.pool.ntp.org</timeservers>
+    <webgui>
+      <protocol>https</protocol>
+      <ssl-certref>[REMOVED]</ssl-certref>
+      <port/>
+      <ssl-ciphers/>
+      <interfaces/>
+      <compression/>
+      <althostnames>firewall.example.local</althostnames>
+    </webgui>
+    <disablenatreflection>yes</disablenatreflection>
+    <usevirtualterminal>1</usevirtualterminal>
+    <disableconsolemenu>1</disableconsolemenu>
+    <disablevlanhwfilter>1</disablevlanhwfilter>
+    <disablechecksumoffloading>1</disablechecksumoffloading>
+    <disablesegmentationoffloading>1</disablesegmentationoffloading>
+    <disablelargereceiveoffloading>1</disablelargereceiveoffloading>
+    <ipv6allow>1</ipv6allow>
+    <powerd_ac_mode>hadp</powerd_ac_mode>
+    <powerd_battery_mode>hadp</powerd_battery_mode>
+    <powerd_normal_mode>hadp</powerd_normal_mode>
+    <bogons>
+      <interval>monthly</interval>
+    </bogons>
+    <pf_share_forward>1</pf_share_forward>
+    <lb_use_sticky>1</lb_use_sticky>
+    <ssh>
+      <group>admins</group>
+      <noauto>1</noauto>
+      <interfaces/>
+      <kex/>
+      <ciphers/>
+      <macs/>
+      <keys/>
+      <keysig/>
+      <rekeylimit/>
+      <enabled>enabled</enabled>
+      <permitrootlogin>1</permitrootlogin>
+      <passwordauth>1</passwordauth>
+    </ssh>
+    <rrdbackup>-1</rrdbackup>
+    <netflowbackup>-1</netflowbackup>
+    <firmware version="1.0.1" persisted_at="1760848261.66">
+      <mirror/>
+      <flavour/>
+      <plugins>os-ntopng,os-redis</plugins>
+      <type/>
+      <subscription/>
+      <reboot>0</reboot>
+    </firmware>
+    <backupcount>4</backupcount>
+    <language>en_US</language>
+    <gw_switch_default>1</gw_switch_default>
+    <dnsserver>8.8.8.8</dnsserver>
+    <dnsserver>1.1.1.1</dnsserver>
+    <dnsserver>9.9.9.9</dnsserver>
+    <dnsserver>149.112.112.112</dnsserver>
+    <dns1gw>none</dns1gw>
+    <dns2gw>none</dns2gw>
+    <dns3gw>none</dns3gw>
+    <dns4gw>none</dns4gw>
+    <dns5gw>none</dns5gw>
+    <dns6gw>none</dns6gw>
+    <dns7gw>none</dns7gw>
+    <dns8gw>none</dns8gw>
+    <prefer_ipv4>1</prefer_ipv4>
+    <serialspeed>115200</serialspeed>
+    <primaryconsole>video</primaryconsole>
+  </system>
+</opnsense>
+  <interfaces>
+    <wan>
+      <if>re1</if>
+      <descr>WAN</descr>
+      <spoofmac>02:00:00:00:01:01</spoofmac>
+      <blockpriv>1</blockpriv>
+      <blockbogons>1</blockbogons>
+      <ipaddr>dhcp</ipaddr>
+      <alias-address/>
+      <alias-subnet>32</alias-subnet>
+    </wan>
+    <lan>
+      <if>re0</if>
+      <descr>LAN</descr>
+      <enable>1</enable>
+      <spoofmac>02:00:00:00:01:02</spoofmac>
+      <ipaddr>192.168.1.1</ipaddr>
+      <subnet>24</subnet>
+    </lan>
+    <opt1>
+      <if>vlan01</if>
+      <descr>WAN_Astound</descr>
+      <enable>1</enable>
+      <spoofmac>02:00:00:00:01:03</spoofmac>
+      <ipaddr>dhcp</ipaddr>
+      <alias-address/>
+      <alias-subnet>32</alias-subnet>
+    </opt1>
+    <opt2>
+      <if>vlan02</if>
+      <descr>WAN_Starlink</descr>
+      <enable>1</enable>
+      <spoofmac>02:00:00:00:01:04</spoofmac>
+      <ipaddr>dhcp</ipaddr>
+      <alias-address/>
+      <alias-subnet>32</alias-subnet>
+    </opt2>
+    <opt3>
+      <if>vlan03</if>
+      <descr>SYNC</descr>
+      <enable>1</enable>
+      <spoofmac>02:00:00:00:01:05</spoofmac>
+      <ipaddr>192.168.99.1</ipaddr>
+      <subnet>30</subnet>
+    </opt3>
+  </interfaces>
+  <filter>
+    <rule uuid="d7d4d15c-7263-4e2e-87c4-f2a35be3c1c8">
+      <type>pass</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <direction>in</direction>
+      <quick>1</quick>
+      <source>
+        <any>1</any>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+    </rule>
+    <rule uuid="70efa61f-7c19-46ca-af6a-a7b8d40a0481">
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <descr>Allow ping scans</descr>
+      <direction>in</direction>
+      <protocol>icmp</protocol>
+      <icmptype>echoreq,echorep</icmptype>
+      <source>
+        <address>192.168.1.32/32</address>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+    </rule>
+    <rule uuid="e2faf1aa-fafa-4271-afd2-7fe25caa06b0">
+      <type>pass</type>
+      <interface>lan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <descr>LAN failover to WAN group</descr>
+      <direction>in</direction>
+      <source>
+        <network>lan</network>
+      </source>
+      <destination>
+        <any>1</any>
+      </destination>
+    </rule>
+  </filter>
+  <dhcpd>
+    <lan>
+      <range>
+        <from>192.168.1.100</from>
+        <to>192.168.1.200</to>
+      </range>
+      <defaultleasetime>7200</defaultleasetime>
+      <maxleasetime>86400</maxleasetime>
+      <netmask>24</netmask>
+      <gateway>192.168.1.1</gateway>
+      <domain>example.local</domain>
+      <dnsserver>192.168.1.1</dnsserver>
+    </lan>
+    <opt3>
+      <range>
+        <from>192.168.99.2</from>
+        <to>192.168.99.3</to>
+      </range>
+      <defaultleasetime>7200</defaultleasetime>
+      <maxleasetime>86400</maxleasetime>
+      <netmask>30</netmask>
+      <gateway>192.168.99.1</gateway>
+      <domain>example.local</domain>
+      <dnsserver>192.168.99.1</dnsserver>
+    </opt3>
+  </dhcpd>
+  <vlans version="1.0.0" persisted_at="1760852923.36">
+    <vlan uuid="4a43b30e-b7a0-4918-abf8-8f8308d6e44f">
+      <if>re1</if>
+      <tag>10</tag>
+      <pcp>0</pcp>
+      <descr>WAN_Astound</descr>
+      <vlanif>vlan01</vlanif>
+    </vlan>
+    <vlan uuid="24a8eb59-51c6-4994-b126-069538e6a414">
+      <if>re1</if>
+      <tag>20</tag>
+      <pcp>0</pcp>
+      <descr>WAN_Starlink</descr>
+      <vlanif>vlan02</vlanif>
+    </vlan>
+    <vlan uuid="829bb5fd-f21a-4c3b-8dba-0c8c0a6874c9">
+      <if>re0</if>
+      <tag>40</tag>
+      <pcp>0</pcp>
+      <descr>SYNC</descr>
+      <vlanif>vlan03</vlanif>
+    </vlan>
+  </vlans>
+</opnsense>
