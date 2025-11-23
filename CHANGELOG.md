@@ -49,6 +49,6 @@ The hardened instructions prioritize:
 - Comprehensive rule set for mxGraph XML generation
 - Style and color palette reference guides
 
-[Unreleased]: https://github.com/username/drawio-ninja/compare/v1.1.0...HEAD
-[1.1.0]: https://github.com/username/drawio-ninja/compare/v1.0.0...v1.1.0
-[1.0.0]: https://github.com/username/drawio-ninja/releases/tag/v1.0.0
+[Unreleased]: https://github.com/simonpo/drawio-ninja/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/simonpo/drawio-ninja/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/simonpo/drawio-ninja/releases/tag/v1.0.0
